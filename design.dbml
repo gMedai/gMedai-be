@@ -1,0 +1,34 @@
+Table tenants {
+  id uuid [pk]
+  name varchar
+  contact varchar
+}
+
+Table roles {
+  id uuid [pk]
+  name varchar
+  tenantId uuid [ref: > tenants.id]
+}
+
+Table users {
+  id uuid [pk]
+  username varchar
+}
+
+Table userRoles {
+  userId uuid [ref: < users.id]
+  roleId uuid [ref: < roles.id]
+}
+
+Table images {
+  id uuid [pk]
+  userId uuid [ref: > users.id]
+  fileName varchar
+  filePath varchar
+}
+
+Table diagnoses {
+  id uuid [pk]
+  diagnosisText varchar
+  imageId uuid [ref: > images.id]
+}
