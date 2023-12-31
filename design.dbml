@@ -23,6 +23,7 @@ Table userRoles {
 Table images {
   id uuid [pk]
   userId uuid [ref: > users.id]
+  tenantId uuid [ref: > tenants.id]
   fileName varchar
   filePath varchar
 }

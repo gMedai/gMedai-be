@@ -2,31 +2,34 @@ version: '3.1'
 
 services:
   app:
-    image: loctvl842/nest-seed
-    container_name: nest-seed
+    image: gmedai/dev_backend
+    container_name: gMedAI-backend
     build: .
     ports:
       - 8402:8402
-    # command: ["yarn", "start:prod"]
     tty: true
-    env_file: .env
     environment:
       - DB_HOST=database
       - DB_USER=postgres
       - DB_PASS=thangcho
-      - DB_NAME=nest_boilerplate
+      - DB_NAME=gmedai
       - DB_PORT=5432
       - DB_TYPE=postgres
+    command: make run-server
     networks:
       - postgres-network
     volumes:
       - .:/app
+    depends_on:
+      - postgres
   postgres:
     image: postgres
-    container_name: nest-seed-postgres
-    restart: always
+    container_name: gMedai-postgres
+    restart: no
     ports:
-      - "5432:5432"
+      - '5432:5432'
+    env_file:
+      - ./.env
     networks:
       - postgres-network
     hostname: database
@@ -34,6 +37,7 @@ services:
       POSTGRES_PASSWORD: thangcho
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
 
 networks:
   postgres-network:
@@ -42,5 +46,4 @@ networks:
 
 volumes:
   pgdata:
-    external: true
     name: pgdata
